@@ -52,6 +52,13 @@ export const constantRoutes = [
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
+    },
+    {
+      path: '/userInfo',
+      name: 'UserInfo',
+      hidden: true,
+      component: () => import('@/views/dashboard/user'),
+      meta: { title: '个人中心', icon: 'dashboard' }
     }]
   },
 
@@ -73,13 +80,26 @@ export const constantRoutes = [
   {
     path: '/products',
     component: Layout,
+    meta: { title: '产品管理', icon: 'product' },
     children: [
       {
         path: 'products',
         name: 'Products',
         component: () => import('@/views/products/index'),
         meta: { title: '产品管理', icon: 'form' }
-      }
+      },
+      {
+        path: 'classify',
+        name: 'Classify',
+        component: () => import('@/views/products/classify'),
+        meta: { title: '分类管理', icon: 'form' }
+      },
+      {
+        path: 'areaList',
+        name: 'AreaList',
+        component: () => import('@/views/products/area'),
+        meta: { title: '区域列表', icon: 'form' }
+      },
     ]
   },
   {

@@ -38,10 +38,10 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: `http://124.71.167.161`,
+        target: `https://h3w3053111.oicp.vip/`,
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: process.env.VUE_APP_BASE_API
+          ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       }
     }
