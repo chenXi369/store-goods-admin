@@ -24,7 +24,7 @@
                     <el-input type="textarea" v-model="innerForm.remark"></el-input>
                 </el-form-item>
                 <el-form-item label="商品详情">
-                    <editor v-model="innerForm.noticeContent" :min-height="192"></editor>
+                    <editor v-model="innerForm.detail" :min-height="192"></editor>
                 </el-form-item>
             </el-form>
 

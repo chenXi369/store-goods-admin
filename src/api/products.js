@@ -53,3 +53,12 @@ export function updateProduct(id) {
     data
   })
 }
+
+// 评测商品
+export function evaluationProduct(data) {
+  return request({
+    url: '/product/evaluation',
+    method: 'post',
+    data
+  })
+}

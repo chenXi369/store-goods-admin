@@ -34,53 +34,116 @@
       </el-col>
 
       <el-col :span="18">
-        <el-table :data="tableData" border v-loading="loading" style="width: 100%">
-          <el-table-column type="index" label="序号" align="center" width="60">
-          </el-table-column>
-          <el-table-column prop="name" label="商品主图" align="center">
-            <template slot-scope="scope">
-              <image-preview :src="scope.row.bannerImg"></image-preview>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" label="产品名称" align="center">
-          </el-table-column>
-          <el-table-column prop="brand" label="商品品牌" align="center">
-          </el-table-column>
-          <el-table-column prop="price" label="商品价格（元）" align="center">
-          </el-table-column>
+        <el-tabs type="border-card" v-model="activeName">
+          <el-tab-pane label="待测产品" name="first">
+            <el-table :data="tableData" border v-loading="loading" style="width: 100%">
+              <el-table-column type="index" label="序号" align="center" width="60">
+              </el-table-column>
+              <el-table-column prop="name" label="商品主图" align="center">
+                <template slot-scope="scope">
+                  <image-preview :src="scope.row.bannerImg"></image-preview>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="产品名称" align="center">
+              </el-table-column>
+              <el-table-column prop="brand" label="商品品牌" align="center">
+              </el-table-column>
+              <el-table-column prop="price" label="商品价格（元）" align="center">
+              </el-table-column>
 
-          <el-table-column label="创建时间" align="center">
-            <template slot-scope="scope">{{ scope.row.createTime.slice(0, 10) }}</template>
-          </el-table-column>
+              <el-table-column label="创建时间" align="center">
+                <template slot-scope="scope">{{ scope.row.createTime.slice(0, 10) }}</template>
+              </el-table-column>
+              
+              <el-table-column label="操作" width="220" align="center">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-edit"
+                    @click="handleUpdate(scope.row)"
+                  >修改</el-button>
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-data-line"
+                    style="margin-left: 25px"
+                    @click="handleEducate(scope.row)"
+                  >测评</el-button>
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-delete"
+                    style="color: red; margin-left: 25px"
+                    @click="handleDel(scope.row)"
+                  >删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <div style="text-align: right">
+              <pagination
+                v-show="total > 0"
+                :total="total"
+                :page.sync="queryParams.pageNum"
+                :limit.sync="queryParams.pageSize"
+                @pagination="getList"
+              />
+            </div>
+          </el-tab-pane>
           
-          <el-table-column label="操作" width="150" align="center">
-            <template slot-scope="scope">
-              <el-button
-                type="text"
-                size="small"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-              >修改</el-button>
-              <el-button
-                type="text"
-                size="small"
-                icon="el-icon-delete"
-                style="color: red; margin-left: 30px"
-                @click="handleDel(scope.row)"
-              >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-tab-pane label="已测产品" name="second">
+            <el-table :data="tableData" border v-loading="loading" style="width: 100%">
+              <el-table-column type="index" label="序号" align="center" width="60">
+              </el-table-column>
+              <el-table-column prop="name" label="商品主图" align="center">
+                <template slot-scope="scope">
+                  <image-preview :src="scope.row.bannerImg"></image-preview>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="产品名称" align="center">
+              </el-table-column>
+              <el-table-column prop="brand" label="商品品牌" align="center">
+              </el-table-column>
+              <el-table-column prop="price" label="商品价格（元）" align="center">
+              </el-table-column>
 
-        <div style="text-align: right">
-          <pagination
-            v-show="total > 0"
-            :total="total"
-            :page.sync="queryParams.pageNum"
-            :limit.sync="queryParams.pageSize"
-            @pagination="getList"
-          />
-        </div>
+              <el-table-column label="是否推荐" align="center">
+                <template slot-scope="scope">{{ scope.row.recommendStatus == 1 ? '推荐' : '不推荐' }}</template>
+              </el-table-column>
+              <el-table-column prop="score" label="测评分数" align="center">
+              </el-table-column>
+              
+              <!-- <el-table-column label="操作" width="150" align="center">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-edit"
+                    @click="handleUpdate(scope.row)"
+                  >修改</el-button>
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-delete"
+                    style="color: red; margin-left: 30px"
+                    @click="handleDel(scope.row)"
+                  >删除</el-button>
+                </template>
+              </el-table-column> -->
+            </el-table>
+
+            <div style="text-align: right">
+              <pagination
+                v-show="total > 0"
+                :total="total"
+                :page.sync="queryParams.pageNum"
+                :limit.sync="queryParams.pageSize"
+                @pagination="getList"
+              />
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </el-col>
     </el-row>
 
@@ -91,15 +154,23 @@
         @handleInnerClose="handleInnerClose"
         @handleInnerConfirm="handleInnerConfirm"
       ></add-dialog>
+
+      <test-dialog
+        ref="testDialog"
+        :testVisible="testVisible"
+        @handleTestClose="handleTestClose"
+        @handleTestConfirm="handleTestConfirm"
+      ></test-dialog>
     </section>
   </div>
 </template>
 
 <script>
 import { getCategory, addProduct, delProduct, updateProduct } from '@/api/table'
-import { getProductList } from '@/api/products'
+import { getProductList, evaluationProduct } from '@/api/products'
 
 import AddDialog from './addDialog.vue'
+import TestDialog from './testDialog.vue'
 
 export default {
   data() {
@@ -119,16 +190,33 @@ export default {
         children: 'children',
         label: 'name'
       },
-      curTreeNode: {}
+      curTreeNode: {},
+      activeName: 'first',
+      testVisible: false
     }
   },
   components: {
-    AddDialog
+    AddDialog,
+    TestDialog
   },
   created() {
     this.getCategory()
 
     this.getProductList()
+  },
+  watch: {
+    activeName(val) {
+      switch (val) {
+        case 'first':
+          this.queryParams.status = 0
+          this.getProductList()
+          break;
+        case 'second':
+          this.queryParams.status = 1
+          this.getProductList()
+          break;
+      }
+    }
   },
   methods: {
     onSubmit() {
@@ -141,6 +229,12 @@ export default {
         pageNum: 1
       }
       this.getProductList()
+    },
+    // 打开测评的弹窗
+    handleEducate(row) {
+      this.testVisible = true
+      this.curData = { ...row }
+      this.$refs.testDialog.innerForm.name = row.name
     },
     // 分页的处理
     getList() {
@@ -189,6 +283,21 @@ export default {
         this.getList()
         this.$message.success("删除成功")
       })
+    },
+    handleTestClose() {
+      this.testVisible = false
+    },
+    // 弹窗的确定按钮
+    handleTestConfirm(row) {
+      this.testVisible = false
+
+      if(this.curData.hasOwnProperty('id')) {
+        const data = { ...row, id: this.curData.id }
+        evaluationProduct(data).then(() => {
+          this.getList()
+          this.$message.success("测评成功")
+        })
+      }
     },
     // 弹窗的取消按钮
     handleInnerClose() {
