@@ -86,7 +86,8 @@
 
     <section>
       <add-dialog 
-        :dialogVisible="dialogVisible" 
+        :dialogVisible="dialogVisible"
+        :categoryOptions="treeData"
         @handleInnerClose="handleInnerClose"
         @handleInnerConfirm="handleInnerConfirm"
       ></add-dialog>
@@ -95,7 +96,7 @@
 </template>
 
 <script>
-import { getCategory } from '@/api/table'
+import { getCategory, addProduct, delProduct, updateProduct } from '@/api/table'
 import { getProductList } from '@/api/products'
 
 import AddDialog from './addDialog.vue'
@@ -170,9 +171,24 @@ export default {
     handleAdd() {
       this.dialogVisible = true
     },
-    // 可以選擇批量刪除
-    handleDelete() {
-
+    // 修改
+    handleUpdate(row) {
+      console.log(row)
+      this.curData = { ...row }
+      this.$refs.addClassify.innerForm.name = row.name
+      this.$refs.addClassify.innerForm.status = Number(row.status)
+      this.dialogVisible = true
+    },
+    // 刪除
+    handleDel(row) {
+      this.$confirm('是否确认删除商品名"' + row.name + '"的数据项？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        return delProduct(row.id)
+      }).then(() => {
+        this.getList()
+        this.$message.success("删除成功")
+      })
     },
     // 弹窗的取消按钮
     handleInnerClose() {
@@ -180,8 +196,21 @@ export default {
     },
     // 弹窗的确定按钮
     handleInnerConfirm(row) {
-      console.log(row)
       this.dialogVisible = false
+
+      if(this.curData.hasOwnProperty('id')) {
+        const data = { ...row, id: this.curData.id }
+        updateProduct(data).then(() => {
+          this.getList()
+          this.$message.success("修改成功")
+        })
+      } else {
+        const data = { ...row }
+        addProduct(data).then(() => {
+          this.getList()
+          this.$message.success("新增成功")
+        })
+      }
     }
   }
 }

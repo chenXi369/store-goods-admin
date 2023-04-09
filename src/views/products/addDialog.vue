@@ -1,9 +1,12 @@
 <template>
     <div>
-        <el-dialog title="新增产品" :visible.sync="dialogVisible" width="600px" size="small" :before-close="handleClose">
-            <el-form ref="form" :rules="rules" :model="innerForm" label-width="80px">
-                <el-form-item label="商品分类">
-                    <el-input disabled v-model="innerForm.categoryId"></el-input>
+        <el-dialog title="新增产品" :visible.sync="dialogVisible" width="600px" :before-close="handleClose">
+            <el-form ref="form" size="small" :rules="rules" :model="innerForm" label-width="80px">
+                <el-form-item label="商品分类" prop="categoryId">
+                    <el-select v-model="innerForm.categoryId" style="width: 100%" placeholder="请选择">
+                        <el-option v-for="item in categoryOptions" :key="item.id" :label="item.name" :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="商品名称" prop="name">
                     <el-input v-model="innerForm.name"></el-input>
@@ -12,7 +15,7 @@
                     <el-input v-model.number="innerForm.price"></el-input>
                 </el-form-item>
                 <el-form-item label="商品主图" prop="bannerImg">
-                    <image-upload :limit="3" ></image-upload>
+                    <image-upload :limit="3"></image-upload>
                 </el-form-item>
                 <el-form-item label="商家品牌" prop="brand">
                     <el-input v-model="innerForm.brand"></el-input>
@@ -26,8 +29,8 @@
             </el-form>
 
             <span slot="footer" class="dialog-footer">
-                <el-button @click="handleClose">取 消</el-button>
-                <el-button type="primary" @click="confirmInnerOlder">确 定</el-button>
+                <el-button size="small" @click="handleClose">取 消</el-button>
+                <el-button size="small" type="primary" @click="confirmInnerOlder">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -39,6 +42,10 @@ export default {
         dialogVisible: {
             type: Boolean,
             default: false
+        },
+        categoryOptions: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -57,6 +64,9 @@ export default {
                 ],
                 bannerImg: [
                     { required: true, message: '请上传商品主图', trigger: 'change' }
+                ],
+                brand: [
+                    { required: true, message: '请输入商品品牌', trigger: 'change' }
                 ]
             }
         }

@@ -86,7 +86,7 @@ export const constantRoutes = [
         path: 'products',
         name: 'Products',
         component: () => import('@/views/products/index'),
-        meta: { title: '产品管理', icon: 'form' }
+        meta: { title: '商品管理', icon: 'form' }
       },
       {
         path: 'classify',
