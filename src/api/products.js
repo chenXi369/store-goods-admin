@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function getProductList(params) {
+export function getProductList(data) {
   return request({
-    url: '/user/productList',
-    method: 'get',
-    query: params
+    url: '/product/list',
+    method: 'post',
+    data
   })
 }
 

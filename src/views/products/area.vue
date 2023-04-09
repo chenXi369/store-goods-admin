@@ -57,7 +57,7 @@ export default {
       queryParams: {
         name: null,
         pageNum: 1,
-        pageSize: 10
+        pageSize: 40
       },
       tableData: [],
       loading: false,
@@ -71,7 +71,7 @@ export default {
     // 获取区域列表
     getArea() {
       this.loading = true
-      getAreaList().then(res => {
+      getAreaList(this.queryParams).then(res => {
         this.tableData = [...res.data]
         // this.total = res.total
         this.loading = false
@@ -79,7 +79,7 @@ export default {
     },
     // 搜索
     onSubmit() {
-
+      this.getArea()
     },
     // 重置
     onCancel() {
