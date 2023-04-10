@@ -15,7 +15,7 @@
                     <el-input v-model.number="innerForm.price"></el-input>
                 </el-form-item>
                 <el-form-item label="商品主图" prop="bannerImg">
-                    <image-upload :limit="3"></image-upload>
+                    <image-upload v-model="innerForm.bannerImg" :value="innerForm.bannerImg" :file-size="2" :limit="1"></image-upload>
                 </el-form-item>
                 <el-form-item label="商家品牌" prop="brand">
                     <el-input v-model="innerForm.brand"></el-input>
@@ -30,7 +30,7 @@
 
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="handleClose">取 消</el-button>
-                <el-button size="small" type="primary" @click="confirmInnerOlder">确 定</el-button>
+                <el-button size="small" type="primary" @click="confirmAddGoods">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -50,7 +50,15 @@ export default {
     },
     data() {
         return {
-            innerForm: {},
+            innerForm: {
+                bannerImg: null,
+                categoryId: null,
+                name: null,
+                price: null,
+                brand: null,
+                detail: null,
+                remark: null
+            },
             rules: {
                 categoryId: [
                     { required: true, message: '请选择商品分类', trigger: 'change' }
@@ -75,8 +83,13 @@ export default {
         handleClose() {
             this.$emit('handleInnerClose')
         },
-        confirmInnerOlder() {
-            this.$emit('handleInnerConfirm', this.innerForm)
+        confirmAddGoods() {
+            console.log(this.innerForm)
+            this.$refs.form.validate(valid => {
+                if(valid) {
+                    this.$emit('handleInnerConfirm', this.innerForm)
+                }
+            })
         }
     }
 }

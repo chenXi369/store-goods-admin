@@ -23,7 +23,7 @@
     </el-row>
 
     <el-row :gutter="20" style="border-top: 1px solid #eaeaea; padding-top: 20px">
-      <el-col :span="6" style="border: 1px solid #eaeaea; padding: 20px">
+      <el-col :span="4" style="border: 1px solid #eaeaea; padding: 20px">
         <el-tree
           :data="treeData"
           :props="defaultProps"
@@ -33,7 +33,7 @@
         </el-tree>
       </el-col>
 
-      <el-col :span="18">
+      <el-col :span="20">
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane label="待测产品" name="first">
             <el-table :data="tableData" border v-loading="loading" style="width: 100%">
@@ -98,7 +98,7 @@
               </el-table-column>
               <el-table-column prop="name" label="商品主图" align="center">
                 <template slot-scope="scope">
-                  <image-preview :src="scope.row.bannerImg"></image-preview>
+                  <image-preview :src="scope.row.bannerImg" :width="'30px'" :height="'30px'"></image-preview>
                 </template>
               </el-table-column>
               <el-table-column prop="name" label="产品名称" align="center">
@@ -166,8 +166,8 @@
 </template>
 
 <script>
-import { getCategory, addProduct, delProduct, updateProduct } from '@/api/table'
-import { getProductList, evaluationProduct } from '@/api/products'
+import { getCategory } from '@/api/table'
+import { getProductList, evaluationProduct, addProduct, delProduct, updateProduct  } from '@/api/products'
 
 import AddDialog from './addDialog.vue'
 import TestDialog from './testDialog.vue'
@@ -192,7 +192,8 @@ export default {
       },
       curTreeNode: {},
       activeName: 'first',
-      testVisible: false
+      testVisible: false,
+      curData: null
     }
   },
   components: {
@@ -264,6 +265,7 @@ export default {
     // 新增 -> 打開新增的彈窗
     handleAdd() {
       this.dialogVisible = true
+      this.curData = null
     },
     // 修改
     handleUpdate(row) {
@@ -307,7 +309,7 @@ export default {
     handleInnerConfirm(row) {
       this.dialogVisible = false
 
-      if(this.curData.hasOwnProperty('id')) {
+      if(this.curData && this.curData.hasOwnProperty('id')) {
         const data = { ...row, id: this.curData.id }
         updateProduct(data).then(() => {
           this.getList()

@@ -70,7 +70,7 @@ export default {
       hideUpload: false,
       uploadImgUrl: process.env.VUE_APP_BASE_API + '/file/upload', // 上传的图片服务器地址
       headers: {
-        Authorization: 'Bearer ' + getToken()
+        token: getToken()
       },
       fileList: []
     }
@@ -115,7 +115,8 @@ export default {
     },
     // 上传成功回调
     handleUploadSuccess(res) {
-      this.uploadList.push({ name: res.data.url, url: process.env.VUE_APP_BASE_FILE_URL + res.data.url })
+      console.log(res)
+      this.uploadList.push({ name: res.data, url: process.env.VUE_APP_BASE_FILE_URL + res.data })
       if (this.uploadList.length === this.number) {
         this.fileList = this.fileList.concat(this.uploadList)
         this.uploadList = []
