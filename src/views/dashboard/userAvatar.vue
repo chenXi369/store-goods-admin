@@ -167,8 +167,8 @@ export default {
           store.commit("SET_AVATAR", this.options.img);
           this.$modal.msgSuccess("修改成功");
           this.visible = false;
-        });
-      });
+        })
+      })
     },
     // 实时预览
     realTime(data) {

@@ -40,8 +40,7 @@ export function addProduct(data) {
 export function delProduct(id) {
   return request({
     url: `/product/del/${id}`,
-    method: 'delete',
-    data
+    method: 'delete'
   })
 }
 
