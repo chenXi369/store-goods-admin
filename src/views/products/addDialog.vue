@@ -82,6 +82,7 @@ export default {
     methods: {
         handleClose() {
             this.$emit('handleInnerClose')
+            this.$refs.form.resetFields()
         },
         confirmAddGoods() {
             console.log(this.innerForm)
@@ -89,6 +90,7 @@ export default {
                 if(valid) {
                     this.$emit('handleInnerConfirm', this.innerForm)
                 }
+                this.$refs.form.resetFields()
             })
         }
     }
