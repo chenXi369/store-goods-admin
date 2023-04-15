@@ -13,7 +13,16 @@ export function login(data) {
 export function getInfo() {
   return request({
     url: '/user/info',
-    method: 'get'
+    method: 'post'
+  })
+}
+
+// 修改用户信息
+export function updateUserInfo(data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
   })
 }
 

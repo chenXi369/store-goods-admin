@@ -1,86 +1,134 @@
 <template>
-    <div class="app-container">
-      <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item label="Activity name">
-          <el-input v-model="form.name" />
-        </el-form-item>
-        <el-form-item label="Activity zone">
-          <el-select v-model="form.region" placeholder="please select your zone">
-            <el-option label="Zone one" value="shanghai" />
-            <el-option label="Zone two" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Activity time">
-          <el-col :span="11">
-            <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-          </el-col>
-          <el-col :span="2" class="line">-</el-col>
-          <el-col :span="11">
-            <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-          </el-col>
-        </el-form-item>
-        <el-form-item label="Instant delivery">
-          <el-switch v-model="form.delivery" />
-        </el-form-item>
-        <el-form-item label="Activity type">
-          <el-checkbox-group v-model="form.type">
-            <el-checkbox label="Online activities" name="type" />
-            <el-checkbox label="Promotion activities" name="type" />
-            <el-checkbox label="Offline activities" name="type" />
-            <el-checkbox label="Simple brand exposure" name="type" />
-          </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="Resources">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="Sponsor" />
-            <el-radio label="Venue" />
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="Activity form">
-          <el-input v-model="form.desc" type="textarea" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">Create</el-button>
-          <el-button @click="onCancel">Cancel</el-button>
-        </el-form-item>
-      </el-form>
+  <div class="app-container">
+    <el-form ref="form" :model="queryParams" :inline="true" label-width="80px" size="small">
+      <el-form-item label="留言人">
+        <el-input v-model="queryParams.nickName" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">搜 索</el-button>
+        <el-button @click="onCancel">重 置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="12" class="mb8" style="margin-bottom: 20px">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          size="small"
+          icon="el-icon-plus"
+          @click="handleAdd"
+        >新增</el-button>
+      </el-col>
+    </el-row>
+
+    <el-table :data="tableData" border v-loading="loading" style="width: 100%">
+      <el-table-column type="index" label="序号" align="center" width="60">
+      </el-table-column>
+      <el-table-column prop="message" label="留言" align="center">
+      </el-table-column>
+      <el-table-column label="留言人" prop="nickName" width="150" align="center"></el-table-column>
+
+      <el-table-column label="创建时间" align="center" width="180">
+        <template slot-scope="scope">{{ scope.row.createTime.slice(0, 10) }}</template>
+      </el-table-column>
+      
+      <el-table-column label="操作" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            size="small"
+            icon="el-icon-delete"
+            style="color: red"
+            @click="handleDel(scope.row)"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div style="text-align: right;">
+      <pagination
+        v-show="total > 0"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getList"
+      />
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
-      }
-    },
-    methods: {
-      onSubmit() {
-        this.$message('submit!')
+  </div>
+</template>
+
+<script>
+import { getMeaasgeList, delMessage } from '@/api/table'
+
+export default {
+  data() {
+    return {
+      queryParams: {
+        nickName: null,
+        pageSize: 10,
+        pageNum: 1
       },
-      onCancel() {
-        this.$message({
-          message: 'cancel!',
-          type: 'warning'
-        })
+      tableData: [],
+      loading: false,
+      total: 0,
+      dialogVisible: false,
+      curData: {}
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    onSubmit() {
+      this.getList()
+    },
+    onCancel() {
+      this.queryParams = {
+        nickName: null,
+        pageSize: 10,
+        pageNum: 1
       }
+      this.getList()
+    },
+    getList() {
+      this.loading = true
+      getMeaasgeList(this.queryParams).then(res => {
+        this.tableData = [...res.data.list]
+        this.total = res.data.total
+        this.loading = false
+      })
+    },
+    // 新增 -> 打開新增的彈窗
+    handleAdd() {
+      this.curData = {}
+      this.dialogVisible = true
+    },
+    // 修改
+    handleUpdate(row) {
+      console.log(row)
+      this.curData = { ...row }
+      this.$refs.addClassify.innerForm.name = row.name
+      this.$refs.addClassify.innerForm.status = Number(row.status)
+      this.dialogVisible = true
+    },
+    // 刪除
+    handleDel(row) {
+      this.$confirm('是否确认删除该留言？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        return delMessage(row.id)
+      }).then(() => {
+        this.getList()
+        this.$message.success("删除成功")
+      })
     }
   }
-  </script>
-  
-  <style scoped>
-  .line{
-    text-align: center;
-  }
-  </style>
-  
-  
+}
+</script>
+
+<style scoped>
+.line {
+  text-align: center;
+}
+</style>

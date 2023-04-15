@@ -42,3 +42,20 @@ export function updateCategory(data) {
     data
   })
 }
+
+// 留言列表
+export function getMeaasgeList(data) {
+  return request({
+    url: '/message/list',
+    method: 'post',
+    data
+  })
+}
+
+// 删除留言
+export function delMessage(id) {
+  return request({
+    url: '/message/del/' + id,
+    method: 'delete'
+  })
+}
