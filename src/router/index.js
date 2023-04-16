@@ -42,44 +42,10 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    },
-    {
-      path: '/userInfo',
-      name: 'UserInfo',
-      hidden: true,
-      component: () => import('@/views/dashboard/user'),
-      meta: { title: '个人中心', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/index',
-    name: 'User',
-    meta: { title: '用户管理', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'consumer',
-        name: 'Consumer',
-        component: () => import('@/views/user/consumer/index'),
-        meta: { title: '信息管理', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/products',
-    component: Layout,
+    redirect: '/products',
     meta: { title: '产品管理', icon: 'product' },
     children: [
       {
@@ -100,6 +66,29 @@ export const constantRoutes = [
         component: () => import('@/views/products/area'),
         meta: { title: '区域列表', icon: 'form' }
       },
+    ]
+  },
+
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    name: 'User',
+    meta: { title: '用户管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'consumer',
+        name: 'Consumer',
+        component: () => import('@/views/user/consumer/index'),
+        meta: { title: '信息管理', icon: 'table' }
+      },
+      {
+        path: '/userInfo',
+        name: 'UserInfo',
+        hidden: true,
+        component: () => import('@/views/dashboard/user'),
+        meta: { title: '个人中心', icon: 'dashboard' }
+      }
     ]
   },
   {

@@ -59,3 +59,11 @@ export function delMessage(id) {
     method: 'delete'
   })
 }
+
+// 精选留言
+export function starMessage(id) {
+  return request({
+    url: '/message/star/' + id,
+    method: 'get'
+  })
+}

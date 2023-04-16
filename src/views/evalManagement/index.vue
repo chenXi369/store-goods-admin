@@ -10,18 +10,6 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="12" class="mb8" style="margin-bottom: 20px">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          size="small"
-          icon="el-icon-plus"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-    </el-row>
-
     <el-table :data="tableData" border v-loading="loading" style="width: 100%">
       <el-table-column type="index" label="序号" align="center" width="60">
       </el-table-column>
@@ -33,13 +21,18 @@
         <template slot-scope="scope">{{ scope.row.createTime.slice(0, 10) }}</template>
       </el-table-column>
       
-      <el-table-column label="操作" width="100" align="center">
+      <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
+            @click="handleGood(scope.row)"
+          >{{ scope.row.type == '1' ? '取消精选' : '设为精选' }}</el-button>
+          <el-button
+            type="text"
+            size="small"
             icon="el-icon-delete"
-            style="color: red"
+            style="color: red; margin-left: 30px;"
             @click="handleDel(scope.row)"
           >删除</el-button>
         </template>
@@ -59,7 +52,7 @@
 </template>
 
 <script>
-import { getMeaasgeList, delMessage } from '@/api/table'
+import { getMeaasgeList, delMessage, starMessage } from '@/api/table'
 
 export default {
   data() {
@@ -99,11 +92,6 @@ export default {
         this.loading = false
       })
     },
-    // 新增 -> 打開新增的彈窗
-    handleAdd() {
-      this.curData = {}
-      this.dialogVisible = true
-    },
     // 修改
     handleUpdate(row) {
       console.log(row)
@@ -111,6 +99,14 @@ export default {
       this.$refs.addClassify.innerForm.name = row.name
       this.$refs.addClassify.innerForm.status = Number(row.status)
       this.dialogVisible = true
+    },
+    // 设为精选
+    handleGood(row) {
+      starMessage(row.id).then(() => {
+        this.getList()
+        const msg = row.type === '1' ? '取消精选成功！' : '添加精选成功！'
+        this.$message.success(msg)
+      })
     },
     // 刪除
     handleDel(row) {
