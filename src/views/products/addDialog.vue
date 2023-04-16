@@ -65,7 +65,7 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    { min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur' }
+                    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
                 ],
                 price: [
                     { required: true, message: '请输入商品价格', trigger: 'blur' }

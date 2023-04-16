@@ -148,7 +148,8 @@
     </el-row>
 
     <section>
-      <add-dialog 
+      <add-dialog
+        ref="goodDailog"
         :dialogVisible="dialogVisible"
         :categoryOptions="treeData"
         @handleInnerClose="handleInnerClose"
@@ -271,8 +272,7 @@ export default {
     handleUpdate(row) {
       console.log(row)
       this.curData = { ...row }
-      this.$refs.addClassify.innerForm.name = row.name
-      this.$refs.addClassify.innerForm.status = Number(row.status)
+      this.$refs.goodDailog.innerForm = {...row}
       this.dialogVisible = true
     },
     // 刪除

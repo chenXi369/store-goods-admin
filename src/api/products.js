@@ -45,7 +45,7 @@ export function delProduct(id) {
 }
 
 // 修改商品
-export function updateProduct(id) {
+export function updateProduct(data) {
   return request({
     url: '/product/update',
     method: 'post',
