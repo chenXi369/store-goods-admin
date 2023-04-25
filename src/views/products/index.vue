@@ -109,7 +109,7 @@
               </el-table-column>
 
               <el-table-column label="是否推荐" align="center">
-                <template slot-scope="scope">{{ scope.row.recommendStatus == 1 ? '推荐' : '不推荐' }}</template>
+                <template slot-scope="scope">{{ scope.row.recommendStatus == 1 ? '是' : '否' }}</template>
               </el-table-column>
               <el-table-column prop="score" label="测评分数" align="center">
               </el-table-column>
