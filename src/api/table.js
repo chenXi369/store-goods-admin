@@ -1,5 +1,26 @@
 import request from '@/utils/request'
 
+export function getUserList(data) {
+  return request({
+    url: '/user/list',
+    method: 'post',
+    data
+  })
+}
+export function deleteUser(id) {
+  return request({
+    url: '/user/del/' + id,
+    method: 'delete',
+  })
+}
+export function updateUser(data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
+  })
+}
+
 export function getList(params) {
   return request({
     url: '/vue-admin-template/table/list',

@@ -91,3 +91,9 @@ export default {
   }
 }
 </script>
+
+<style>
+ul {
+  list-style: none;
+}
+</style>
