@@ -160,7 +160,7 @@ export default {
     handleInnerConfirm(row) {
       this.dialogVisible = false
       if(this.curData.hasOwnProperty('userId')) {
-        const data = { ...row, id: this.curData.id }
+        const data = { ...row, userId: this.curData.userId }
         updateUser(data).then(() => {
           this.getList()
           this.$message.success("修改成功")
